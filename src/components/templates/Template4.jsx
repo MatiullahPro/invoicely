@@ -4,7 +4,7 @@ import BaseTemplate from './BaseTemplate';
 import { formatCurrency } from '../../utils/formatCurrency';
 
 const Template4 = ({ data }) => {
-  const { billTo = {}, shipTo = {}, invoice = {}, yourCompany = {}, items = [], taxPercentage = 0, taxAmount = 0, subTotal = 0, grandTotal = 0, notes = '', selectedCurrency } = data || {};
+  const { billTo = {}, shipTo = {}, invoice = {}, yourCompany = {}, items = [], taxPercentage = 0, taxAmount = 0, subTotal = 0, grandTotal = 0, notes = '', selectedCurrency, img } = data || {};
 
   return (
     <BaseTemplate data={data}>
@@ -13,70 +13,77 @@ const Template4 = ({ data }) => {
           <div>
             <h1 className="text-4xl font-bold text-purple-600 mb-4">Invoice</h1>
             <p>
-              <span className="font-semibold">Invoice#:</span>{" "}
-              {invoice.number || "N/A"}
+              <strong>Invoice No:</strong> {invoice.number || ""}
             </p>
             <p>
-              <span className="font-semibold">Invoice Date:</span>{" "}
-              {invoice.date
-                ? format(new Date(invoice.date), "MMM dd, yyyy")
-                : "N/A"}
+              <strong>Date:</strong> {invoice.date || ""}
             </p>
             <p>
-              <span className="font-semibold">Due Date:</span>{" "}
-              {invoice.paymentDate
-                ? format(new Date(invoice.paymentDate), "MMM dd, yyyy")
-                : "N/A"}
+              <strong>Due Date:</strong> {invoice.paymentDate || ""}
             </p>
           </div>
           <div className="text-right">
-            <h2 className="text-2xl font-bold">
-              {yourCompany.name || "Company Name"}
+            <h2 className="text-2xl font-bold text-gray-800">
+              {yourCompany.name || "Your Company Name"}
             </h2>
-            <p>{yourCompany.address || "Company Address"}</p>
-            <p>{yourCompany.phone || "Company Phone"}</p>
+            <p className="text-sm text-gray-600">
+              {yourCompany.address || "Your Address"}
+            </p>
+            <p className="text-sm text-gray-600">
+              {yourCompany.phone || "Your Phone"}
+            </p>
           </div>
         </div>
 
         <div className="grid grid-cols-2 gap-8 mb-8">
-          <div className="bg-gray-100 p-4 rounded">
+          <div className="border border-purple-100 p-4 rounded-lg bg-purple-50/30">
             <h3 className="text-lg font-semibold text-purple-600 mb-2">
-              Billed by
-            </h3>
-            <p>
-              <strong>{yourCompany.name || "Company Name"}</strong>
-            </p>
-            <p>{yourCompany.address || "Company Address"}</p>
-            <p>{yourCompany.phone || "Company Phone"}</p>
-          </div>
-          <div className="bg-gray-100 p-4 rounded">
-            <h3 className="text-lg font-semibold text-purple-600 mb-2">
-              Billed to
+              Bill To
             </h3>
             <p>
               <strong>{billTo.name || "Client Name"}</strong>
             </p>
-            <p>{billTo.address || "Client Address"}</p>
-            <p>{billTo.phone || "Client Phone"}</p>
+            <p className="text-sm text-gray-600">
+              {billTo.address || "Client Address"}
+            </p>
+            <p className="text-sm text-gray-600">
+              {billTo.phone || "Client Phone"}
+            </p>
           </div>
+          {shipTo && shipTo.name && (
+            <div className="border border-purple-100 p-4 rounded-lg bg-purple-50/30">
+              <h3 className="text-lg font-semibold text-purple-600 mb-2">
+                Ship To
+              </h3>
+              <p>
+                <strong>{shipTo.name}</strong>
+              </p>
+              <p className="text-sm text-gray-600">{shipTo.address}</p>
+              <p className="text-sm text-gray-600">{shipTo.phone}</p>
+            </div>
+          )}
         </div>
 
-        <table className="w-full mb-8 border border-gray-300">
-          <thead className="bg-purple-600 text-white">
-            <tr>
-              <th className="p-2 text-left border border-gray-300">
-                Item #/Item Description
+        <table className="w-full mb-8 border-collapse">
+          <thead>
+            <tr className="bg-purple-600 text-white">
+              <th className="p-2 text-left border border-gray-300">Item</th>
+              <th className="p-2 text-right border border-gray-300 w-24">
+                Qty
               </th>
-              <th className="p-2 text-right border border-gray-300">Qty.</th>
-              <th className="p-2 text-right border border-gray-300">Rate</th>
-              <th className="p-2 text-right border border-gray-300">Amount</th>
+              <th className="p-2 text-right border border-gray-300 w-32">
+                Unit Price
+              </th>
+              <th className="p-2 text-right border border-gray-300 w-32">
+                Total
+              </th>
             </tr>
           </thead>
           <tbody>
             {items.map((item, index) => (
-              <tr key={index} className="bg-gray-100">
+              <tr key={index} className="hover:bg-purple-50/10">
                 <td className="p-2 border border-gray-300">
-                  {`${index + 1}. ${item.name || "Item Name"}`}
+                  <strong>{item.name || "Item Name"}</strong>
                   <br />
                   <span className="text-sm text-gray-600">
                     {item.description || "Item Description"}
@@ -115,12 +122,20 @@ const Template4 = ({ data }) => {
           </div>
         </div>
 
-        {notes && (
-          <div className="mb-8">
-            <h3 className="text-lg font-semibold text-purple-600 mb-2">Note</h3>
-            <p>{notes}</p>
-          </div>
-        )}
+        <div className="mt-8 flex justify-between items-end border-t border-purple-100 pt-4">
+          {notes && (
+            <div className="max-w-lg">
+              <h3 className="text-lg font-semibold text-purple-600 mb-2">Note</h3>
+              <p className="text-sm text-gray-600">{notes}</p>
+            </div>
+          )}
+          {img && (
+            <div className="text-right">
+              <h3 className="font-semibold text-sm mb-2 text-purple-600">Signature:</h3>
+              <img src={img} alt="Signature" className="max-h-16 object-contain ml-auto" />
+            </div>
+          )}
+        </div>
       </div>
     </BaseTemplate>
   );

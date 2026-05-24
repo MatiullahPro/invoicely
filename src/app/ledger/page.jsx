@@ -60,7 +60,7 @@ export default function LedgerPage() {
     );
 
     return (
-        <div className="container px-4 md:px-8 max-w-7xl mx-auto items-center mt-6 md:mt-10 mb-20">
+        <div className="container px-4 md:px-8 max-w-7xl mx-auto mt-6 md:mt-10 mb-20">
             <div className="mb-8 md:mb-12">
                 <h1 className="text-3xl md:text-4xl font-black tracking-tight mb-2">Performance Ledger</h1>
                 <p className="text-muted-foreground text-sm md:text-lg max-w-2xl">Detailed overview of your business revenue and transaction volume.</p>

@@ -69,7 +69,7 @@ function ToolsContent() {
     const roi = investmentAmount > 0 ? ((returnAmount - investmentAmount) / investmentAmount) * 100 : 0;
 
     return (
-        <div className="container px-4 md:px-8 max-w-7xl mx-auto items-center mt-6 md:mt-10 mb-20">
+        <div className="container px-4 md:px-8 max-w-7xl mx-auto mt-6 md:mt-10 mb-20">
             <div className="mb-8 md:mb-12">
                 <h1 className="text-3xl md:text-4xl font-black tracking-tight mb-2">Business Toolkit</h1>
                 <p className="text-muted-foreground text-sm md:text-lg max-w-2xl">Essential calculators to help you manage your business pricing, taxes, and performance.</p>

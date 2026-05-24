@@ -54,7 +54,7 @@ export default function HistoryPage() {
     );
 
     return (
-        <div className="container px-4 md:px-8 max-w-7xl mx-auto items-center mt-6 md:mt-10 mb-20">
+        <div className="container px-4 md:px-8 max-w-7xl mx-auto mt-6 md:mt-10 mb-20">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-6">
                 <div>
                     <h1 className="text-3xl font-bold tracking-tight">Billing History</h1>

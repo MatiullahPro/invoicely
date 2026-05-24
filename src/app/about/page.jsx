@@ -1,11 +1,9 @@
-"use client";
-
 import { Info, Shield, Zap, Globe, Smartphone, Save } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export default function AboutPage() {
     return (
-        <div className="container items-center mt-10">
+        <div className="container max-w-7xl mx-auto px-4 mt-10">
             <div className="text-center mb-16 space-y-4">
                 <h1 className="text-4xl font-extrabold tracking-tight lg:text-5xl">
                     About Invoicely

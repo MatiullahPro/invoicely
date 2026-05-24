@@ -3,7 +3,7 @@ import BaseTemplate from './BaseTemplate';
 import { formatCurrency } from '../../utils/formatCurrency';
 
 const Template3 = ({ data }) => {
-  const { billTo, shipTo, invoice, yourCompany, items, taxPercentage, taxAmount, subTotal, grandTotal, notes, selectedCurrency } = data;
+  const { billTo, shipTo, invoice, yourCompany, items, taxPercentage, taxAmount, subTotal, grandTotal, notes, selectedCurrency, img } = data;
 
   return (
     <BaseTemplate data={data}>
@@ -90,6 +90,15 @@ const Template3 = ({ data }) => {
             </div>
           </div>
         </div>
+
+        {img && (
+          <div className="mt-8 flex justify-end px-4">
+            <div className="text-right">
+              <h3 className="font-semibold text-sm mb-2">Signature:</h3>
+              <img src={img} alt="Signature" className="max-h-12 object-contain ml-auto" />
+            </div>
+          </div>
+        )}
       </div>
     </BaseTemplate>
   );

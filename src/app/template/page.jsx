@@ -59,7 +59,7 @@ const TemplatePage = () => {
     }
 
     return (
-        <div className="container items-center mt-10">
+        <div className="container max-w-7xl mx-auto px-4 mt-10 mb-20">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-12 gap-6">
                 <div>
                     <h1 className="text-3xl font-bold tracking-tight">Invoice Preview</h1>

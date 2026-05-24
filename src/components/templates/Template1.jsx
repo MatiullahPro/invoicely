@@ -3,7 +3,7 @@ import BaseTemplate from './BaseTemplate';
 import { formatCurrency } from '../../utils/formatCurrency';
 
 const Template1 = ({ data }) => {
-  const { billTo, shipTo, invoice, yourCompany, items, taxPercentage, taxAmount, subTotal, grandTotal, notes, selectedCurrency, sig } = data;
+  const { billTo, shipTo, invoice, yourCompany, items, taxPercentage, taxAmount, subTotal, grandTotal, notes, selectedCurrency, img } = data;
 
   return (
     <BaseTemplate data={data}>
@@ -13,10 +13,6 @@ const Template1 = ({ data }) => {
             <h2 className="text-3xl font-semibold">INVOICE</h2>
           </div>
         </div>
-
-        {
-          console.log(sig)
-        }
 
         <div className="flex justify-between mb-12">
           <div>
@@ -95,14 +91,19 @@ const Template1 = ({ data }) => {
           </div>
         </div>
 
-        <div className="mt-8">
-          <h3 className="font-semibold mb-2">Notes:</h3>
-          <p>{notes}</p>
-        </div>
-
-        <div className="mt-8">
-          <h3 className="font-semibold mb-2">Signature:</h3>
-          <img src={JSON.parse(localStorage.getItem('formData')).img} alt="Signature" className="max-w-full" />
+        <div className="mt-8 flex justify-between items-end">
+          {notes && (
+            <div className="max-w-lg">
+              <h3 className="font-semibold mb-2">Notes:</h3>
+              <p className="text-sm text-gray-600">{notes}</p>
+            </div>
+          )}
+          {img && (
+            <div className="text-right">
+              <h3 className="font-semibold mb-2">Signature:</h3>
+              <img src={img} alt="Signature" className="max-h-16 object-contain ml-auto" />
+            </div>
+          )}
         </div>
       </div>
     </BaseTemplate>

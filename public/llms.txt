@@ -1,0 +1,25 @@
+# Invoicely
+
+Invoicely is a free, privacy-first, offline-first billing and financial management suite for freelancers, entrepreneurs, and small businesses. It runs entirely in the browser and saves all data locally.
+
+## Features
+
+- **Invoice Wizard**: Step-by-step guidance for date, company, customer, line items, signature, and design templates.
+- **Receipt Maker**: Streamlined builder for quick sales receipts.
+- **Client & Inventory Directories**: Offline customer directory and product databases.
+- **Ledger & Analytics**: Spreadsheet-style financial logging and performance reports.
+- **Business Toolkit**: A set of six specialized financial calculators (Taxes, Profit Margins, Discounts, Unit Price, Late Fees, and ROI).
+- **Privacy-First**: No tracking, cookies, or backend servers. Uses persistent browser LocalStorage and IndexedDB.
+
+## Site Structure (Sitemap)
+
+- `/`: Primary Invoice Wizard & template selector.
+- `/receipt`: Receipt creator.
+- `/clients`: Customer manager and local directory.
+- `/inventory`: Product catalog and service pricing tracker.
+- `/history`: Record archives of generated invoices and receipts.
+- `/ledger`: Sales breakdowns, revenue charts, and transaction ledger sheets.
+- `/tools`: Multi-purpose business calculators.
+- `/about`: Project values and technical description.
+- `/sitemap.xml`: Standard XML sitemap.
+- `/llms.txt`: This machine-readable LLM documentation file.
