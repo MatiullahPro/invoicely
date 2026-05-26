@@ -4,6 +4,7 @@ import React, { useState, Suspense, useEffect } from "react";
 import { Calculator, Percent, Scaling, ArrowLeftRight, Database, Tag, RefreshCcw, Landmark, TrendingUp, BarChart3, Coins, IndianRupee } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useSearchParams } from "next/navigation";
+import Link from "next/link";
 import { toast } from "sonner";
 
 function ToolsContent() {
@@ -76,6 +77,46 @@ function ToolsContent() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {/* Backup & Restore */}
+                <div className="bg-card border rounded-[2rem] p-8 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
+                    <div>
+                        <div className="flex items-center gap-3 mb-6">
+                            <div className="p-3 bg-indigo-500/10 rounded-2xl text-indigo-600">
+                                <Database className="h-6 w-6" />
+                            </div>
+                            <h2 className="text-xl font-bold">Data Backups</h2>
+                        </div>
+                        <p className="text-muted-foreground text-xs leading-relaxed mb-6">
+                            Securely export all local databases to a local file or import existing backups to restore/sync your invoices, expenses, clients, and inventory records.
+                        </p>
+                    </div>
+                    <Link href="/tools/backup" className="w-full">
+                        <Button className="w-full font-bold py-3.5 rounded-2xl bg-indigo-600 hover:bg-indigo-700 text-white shadow-md transition-all">
+                            Open Backup Tool
+                        </Button>
+                    </Link>
+                </div>
+
+                {/* Custom Template Builder */}
+                <div className="bg-card border rounded-[2rem] p-8 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
+                    <div>
+                        <div className="flex items-center gap-3 mb-6">
+                            <div className="p-3 bg-purple-500/10 rounded-2xl text-purple-600">
+                                <Scaling className="h-6 w-6" />
+                            </div>
+                            <h2 className="text-xl font-bold">Template Builder</h2>
+                        </div>
+                        <p className="text-muted-foreground text-xs leading-relaxed mb-6">
+                            Create fully personalized, beautiful invoice layouts using brand colors, responsive formats, custom fonts, and save them for instant PDF generation.
+                        </p>
+                    </div>
+                    <Link href="/tools/template-builder" className="w-full">
+                        <Button className="w-full font-bold py-3.5 rounded-2xl bg-purple-600 hover:bg-purple-700 text-white shadow-md transition-all">
+                            Open Builder
+                        </Button>
+                    </Link>
+                </div>
+
                 {/* GST / TAX Calculator */}
                 <div className="bg-card border rounded-[2rem] p-8 shadow-sm hover:shadow-md transition-shadow">
                     <div className="flex items-center gap-3 mb-6">

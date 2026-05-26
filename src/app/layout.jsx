@@ -5,6 +5,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import ReactQueryProvider from "@/components/ReactQueryProvider";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { Navbar } from "@/components/Navbar";
+import { LanguageProvider } from "@/context/LanguageContext";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -56,11 +57,13 @@ export default function RootLayout({ children }) {
             <body className={`${inter.className} min-h-screen overflow-x-hidden`}>
                 <ReactQueryProvider>
                     <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-                        <TooltipProvider>
-                            <Navbar />
-                            <main>{children}</main>
-                            <Toaster />
-                        </TooltipProvider>
+                        <LanguageProvider>
+                            <TooltipProvider>
+                                <Navbar />
+                                <main>{children}</main>
+                                <Toaster />
+                            </TooltipProvider>
+                        </LanguageProvider>
                     </ThemeProvider>
                 </ReactQueryProvider>
             </body>

@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import InvoiceTemplate from '@/components/InvoiceTemplate';
 import { generatePDF } from '@/utils/pdfGenerator';
-import { templates } from '@/utils/templateRegistry';
+import { templates, getAllTemplates } from '@/utils/templateRegistry';
 
 const TemplatePage = () => {
     const router = useRouter();
@@ -27,7 +27,7 @@ const TemplatePage = () => {
             }
         }
         if (savedTemplate) {
-            setCurrentTemplate(parseInt(savedTemplate));
+            setCurrentTemplate(savedTemplate.startsWith('custom-') ? savedTemplate : parseInt(savedTemplate));
         }
     }, []);
 
@@ -87,29 +87,36 @@ const TemplatePage = () => {
                         <h2 className="font-bold uppercase text-xs tracking-widest text-muted-foreground">Select Design</h2>
                     </div>
                     <div className="space-y-3 h-[600px] overflow-y-auto pr-2 scrollbar-hide">
-                        {templates.map((template, index) => (
+                        {getAllTemplates().map((template) => (
                             <button
-                                key={index}
-                                className={`w-full text-left rounded-xl border-2 transition-all group overflow-hidden ${currentTemplate === index + 1
+                                key={template.id}
+                                className={`w-full text-left rounded-xl border-2 transition-all group overflow-hidden ${currentTemplate === template.id
                                     ? "border-primary bg-primary/5 ring-1 ring-primary/20 shadow-md"
                                     : "border-muted bg-card hover:border-muted-foreground/30"
                                     }`}
-                                onClick={() => handleTemplateChange(index + 1)}
+                                onClick={() => handleTemplateChange(template.id)}
                             >
-                                <div className="aspect-[4/3] bg-muted relative overflow-hidden">
-                                    <img
-                                        src={`/assets/template${index + 1}-preview.png`}
-                                        alt={template.name}
-                                        className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
-                                    />
-                                    {currentTemplate === index + 1 && (
+                                <div className="aspect-[4/3] bg-muted relative overflow-hidden flex items-center justify-center">
+                                    {template.isCustom ? (
+                                        <div className="flex flex-col items-center gap-1.5 p-3 text-center">
+                                            <Layout className="h-6 w-6 text-primary" />
+                                            <span className="text-[9px] font-bold text-primary uppercase tracking-widest">Custom Design</span>
+                                        </div>
+                                    ) : (
+                                        <img
+                                            src={`/assets/template${template.id}-preview.png`}
+                                            alt={template.name}
+                                            className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
+                                        />
+                                    )}
+                                    {currentTemplate === template.id && (
                                         <div className="absolute inset-0 bg-primary/10 flex items-center justify-center">
                                             <div className="bg-primary text-primary-foreground px-2 py-1 rounded text-[10px] font-bold uppercase">Active</div>
                                         </div>
                                     )}
                                 </div>
                                 <div className="p-3">
-                                    <p className={`font-bold text-sm ${currentTemplate === index + 1 ? "text-primary" : ""}`}>
+                                    <p className={`font-bold text-sm ${currentTemplate === template.id ? "text-primary" : ""}`}>
                                         {template.name}
                                     </p>
                                 </div>

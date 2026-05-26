@@ -7,10 +7,11 @@ import FloatingLabelInput from '../components/FloatingLabelInput';
 import BillToSection from '../components/BillToSection';
 import ShipToSection from '../components/ShipToSection';
 import ItemDetails from "../components/ItemDetails";
-import { templates } from "../utils/templateRegistry";
+import { templates, getAllTemplates } from "../utils/templateRegistry";
 import { FiEdit, FiFileText, FiTrash2, FiChevronRight, FiChevronLeft, FiCheck } from "react-icons/fi";
 import { RefreshCw, Save, Users, Box, History, CheckCircle, Database, ArrowLeftRight, Percent, LayoutDashboard } from "lucide-react";
 import SignatureCanvas from 'react-signature-canvas';
+import { useLanguage } from '../context/LanguageContext';
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import {
@@ -55,16 +56,18 @@ const noteOptions = [
     "Keep this receipt for returns or exchanges.",
 ];
 
-const STEPS = [
-    { title: "Invoice Info", description: "Dates & Numbers" },
-    { title: "Company", description: "Your Details" },
-    { title: "Customer", description: "Recipient Details" },
-    { title: "Items", description: "Products & Services" },
-    { title: "Finalize", description: "Notes & Signature" },
-    { title: "Template", description: "Choose Design" }
-];
-
 const Index = () => {
+    const { t } = useLanguage();
+
+    const STEPS = [
+        { title: t("stepInfo"), description: t("invoiceNumber") },
+        { title: t("stepCompany"), description: t("companyDetails") },
+        { title: t("stepCustomer"), description: t("customerDetails") },
+        { title: t("stepItems"), description: t("stepItems") },
+        { title: t("stepFinalize"), description: t("notes") + " & " + t("signature") },
+        { title: t("stepTemplate"), description: t("stepTemplate") }
+    ];
+
     const router = useRouter();
     const [currentStep, setCurrentStep] = useState(0);
     const [selectedCurrency, setSelectedCurrency] = useState("INR");
@@ -242,18 +245,18 @@ const Index = () => {
             <div className="mb-12">
                 <div className="flex justify-between items-center mb-8">
                     <div>
-                        <h1 className="text-3xl font-bold tracking-tight">Create Invoice</h1>
-                        <p className="text-muted-foreground">Step {currentStep + 1} of {STEPS.length}: {STEPS[currentStep].title}</p>
+                        <h1 className="text-3xl font-bold tracking-tight">{t("invoices")}</h1>
+                        <p className="text-muted-foreground">{t("stepInfo")} {currentStep + 1} / {STEPS.length}: {STEPS[currentStep].title}</p>
                     </div>
                     <div className="flex gap-2">
                         <Button variant="outline" className="h-10 text-destructive hover:bg-destructive/10" onClick={clearForm} title="Clear All">
-                            <FiTrash2 className="h-4 w-4" /> <span className="ml-2 hidden sm:inline">Clear</span>
+                            <FiTrash2 className="h-4 w-4" /> <span className="ml-2 hidden sm:inline">{t("clear")}</span>
                         </Button>
                         <Button variant="outline" className="h-10" onClick={fillDummyData}>
-                            <Database className="h-4 w-4" /> <span className="ml-2 hidden sm:inline">Dummy Data</span>
+                            <Database className="h-4 w-4" /> <span className="ml-2 hidden sm:inline">{t("fillDemoData")}</span>
                         </Button>
                         <Button variant="outline" className="h-10 border-primary text-primary hover:bg-primary/5" onClick={saveAllData}>
-                            <Save className="h-4 w-4" /> <span className="ml-2 hidden sm:inline">Save Draft</span>
+                            <Save className="h-4 w-4" /> <span className="ml-2 hidden sm:inline">{t("save")}</span>
                         </Button>
                     </div>
                 </div>
@@ -287,9 +290,9 @@ const Index = () => {
                     {currentStep === 0 && (
                         <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-300">
                             <div className="flex items-center justify-between mb-4">
-                                <h2 className="text-2xl font-semibold">Invoice Details</h2>
+                                <h2 className="text-2xl font-semibold">{t("stepInfo")}</h2>
                                 <div className="flex items-center gap-2">
-                                    <span className="text-sm font-medium text-muted-foreground">Currency:</span>
+                                    <span className="text-sm font-medium text-muted-foreground">{t("selectCurrency")}:</span>
                                     <Select value={selectedCurrency} onValueChange={setSelectedCurrency}>
                                         <SelectTrigger className="w-[120px] bg-background">
                                             <SelectValue placeholder="Currency" />
@@ -304,9 +307,9 @@ const Index = () => {
                                 </div>
                             </div>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <FloatingLabelInput id="invoiceNumber" label="Invoice Number" value={invoice.number} onChange={handleInputChange(setInvoice)} name="number" />
-                                <FloatingLabelInput id="invoiceDate" label="Invoice Date" type="date" value={invoice.date} onChange={handleInputChange(setInvoice)} name="date" />
-                                <FloatingLabelInput id="paymentDate" label="Due Date" type="date" value={invoice.paymentDate} onChange={handleInputChange(setInvoice)} name="paymentDate" />
+                                <FloatingLabelInput id="invoiceNumber" label={t("invoiceNumber")} value={invoice.number} onChange={handleInputChange(setInvoice)} name="number" />
+                                <FloatingLabelInput id="invoiceDate" label={t("invoiceDate")} type="date" value={invoice.date} onChange={handleInputChange(setInvoice)} name="date" />
+                                <FloatingLabelInput id="paymentDate" label={t("dueDate")} type="date" value={invoice.paymentDate} onChange={handleInputChange(setInvoice)} name="paymentDate" />
                             </div>
                         </div>
                     )}
@@ -314,12 +317,12 @@ const Index = () => {
                     {/* Step 2: Company Info */}
                     {currentStep === 1 && (
                         <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-300">
-                            <h2 className="text-2xl font-semibold">Your Business Information</h2>
+                            <h2 className="text-2xl font-semibold">{t("companyDetails")}</h2>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <FloatingLabelInput id="yourCompanyName" label="Company Name" value={yourCompany.name} onChange={handleInputChange(setYourCompany)} name="name" />
-                                <FloatingLabelInput id="yourCompanyPhone" label="Contact Phone" value={yourCompany.phone} onChange={handleInputChange(setYourCompany)} name="phone" />
+                                <FloatingLabelInput id="yourCompanyName" label={t("companyName")} value={yourCompany.name} onChange={handleInputChange(setYourCompany)} name="name" />
+                                <FloatingLabelInput id="yourCompanyPhone" label={t("phone")} value={yourCompany.phone} onChange={handleInputChange(setYourCompany)} name="phone" />
                                 <div className="md:col-span-2">
-                                    <FloatingLabelInput id="yourCompanyAddress" label="Business Address" value={yourCompany.address} onChange={handleInputChange(setYourCompany)} name="address" />
+                                    <FloatingLabelInput id="yourCompanyAddress" label={t("address")} value={yourCompany.address} onChange={handleInputChange(setYourCompany)} name="address" />
                                 </div>
                             </div>
                         </div>
@@ -330,22 +333,22 @@ const Index = () => {
                         <div className="space-y-8 animate-in fade-in slide-in-from-right-4 duration-300">
                             <div>
                                 <div className="flex justify-between items-center mb-4">
-                                    <h2 className="text-2xl font-semibold">Bill To</h2>
+                                    <h2 className="text-2xl font-semibold">{t("billTo")}</h2>
                                     <Dialog>
                                         <DialogTrigger asChild>
                                             <Button variant="outline" size="sm" className="text-primary gap-1 border-primary/20 hover:bg-primary/5">
-                                                <Users className="h-4 w-4" /> Select Client
+                                                <Users className="h-4 w-4" /> {t("selectClient")}
                                             </Button>
                                         </DialogTrigger>
                                         <DialogContent className="max-w-md">
                                             <DialogHeader>
-                                                <DialogTitle>Client Directory</DialogTitle>
+                                                <DialogTitle>{t("clients")}</DialogTitle>
                                             </DialogHeader>
                                             <Command className="border rounded-lg">
-                                                <CommandInput placeholder="Search clients..." />
+                                                <CommandInput placeholder={t("search")} />
                                                 <CommandList>
                                                     <CommandEmpty>No clients found.</CommandEmpty>
-                                                    <CommandGroup heading="Recent Clients">
+                                                    <CommandGroup heading={t("clients")}>
                                                         {JSON.parse(localStorage.getItem("billing_clients") || "[]").map((client) => (
                                                             <CommandItem
                                                                 key={client.id}
@@ -368,20 +371,20 @@ const Index = () => {
                                     </Dialog>
                                 </div>
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                    <FloatingLabelInput id="billToName" label="Client Name" value={billTo.name} onChange={handleInputChange(setBillTo)} name="name" />
-                                    <FloatingLabelInput id="billToPhone" label="Client Phone" value={billTo.phone} onChange={handleInputChange(setBillTo)} name="phone" />
+                                    <FloatingLabelInput id="billToName" label={t("clientName")} value={billTo.name} onChange={handleInputChange(setBillTo)} name="name" />
+                                    <FloatingLabelInput id="billToPhone" label={t("phone")} value={billTo.phone} onChange={handleInputChange(setBillTo)} name="phone" />
                                     <div className="md:col-span-2">
-                                        <FloatingLabelInput id="billToAddress" label="Client Address" value={billTo.address} onChange={handleInputChange(setBillTo)} name="address" />
+                                        <FloatingLabelInput id="billToAddress" label={t("address")} value={billTo.address} onChange={handleInputChange(setBillTo)} name="address" />
                                     </div>
                                 </div>
                             </div>
                             <div>
-                                <h2 className="text-2xl font-semibold mb-4">Ship To <span className="text-sm font-normal text-muted-foreground ml-2">(Optional)</span></h2>
+                                <h2 className="text-2xl font-semibold mb-4">{t("shipTo")} <span className="text-sm font-normal text-muted-foreground ml-2">(Optional)</span></h2>
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                    <FloatingLabelInput id="shipToName" label="Recipient Name" value={shipTo.name} onChange={handleInputChange(setShipTo)} name="name" />
-                                    <FloatingLabelInput id="shipToPhone" label="Recipient Phone" value={shipTo.phone} onChange={handleInputChange(setShipTo)} name="phone" />
+                                    <FloatingLabelInput id="shipToName" label={t("clientName")} value={shipTo.name} onChange={handleInputChange(setShipTo)} name="name" />
+                                    <FloatingLabelInput id="shipToPhone" label={t("phone")} value={shipTo.phone} onChange={handleInputChange(setShipTo)} name="phone" />
                                     <div className="md:col-span-2">
-                                        <FloatingLabelInput id="shipToAddress" label="Shipping Address" value={shipTo.address} onChange={handleInputChange(setShipTo)} name="address" />
+                                        <FloatingLabelInput id="shipToAddress" label={t("address")} value={shipTo.address} onChange={handleInputChange(setShipTo)} name="address" />
                                     </div>
                                 </div>
                             </div>
@@ -392,23 +395,23 @@ const Index = () => {
                     {currentStep === 3 && (
                         <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-300">
                             <div className="flex justify-between items-center">
-                                <h2 className="text-2xl font-semibold">Line Items</h2>
+                                <h2 className="text-2xl font-semibold">{t("stepItems")}</h2>
                                 <div className="flex gap-2">
                                     <Dialog>
                                         <DialogTrigger asChild>
                                             <Button variant="outline" size="sm" className="gap-1">
-                                                <Box className="h-4 w-4" /> Add from Inventory
+                                                <Box className="h-4 w-4" /> {t("addItem")} ({t("inventory")})
                                             </Button>
                                         </DialogTrigger>
                                         <DialogContent className="max-w-md">
                                             <DialogHeader>
-                                                <DialogTitle>Product Inventory</DialogTitle>
+                                                <DialogTitle>{t("inventory")}</DialogTitle>
                                             </DialogHeader>
                                             <Command className="border rounded-lg">
-                                                <CommandInput placeholder="Search inventory..." />
+                                                <CommandInput placeholder={t("search")} />
                                                 <CommandList>
                                                     <CommandEmpty>No products found.</CommandEmpty>
-                                                    <CommandGroup heading="Available Items">
+                                                    <CommandGroup heading={t("inventory")}>
                                                         {JSON.parse(localStorage.getItem("billing_inventory") || "[]").map((item) => (
                                                             <CommandItem
                                                                 key={item.id}
@@ -441,12 +444,12 @@ const Index = () => {
 
                             <div className="mt-8 p-6 bg-muted/30 rounded-lg space-y-3">
                                 <div className="flex justify-between text-sm">
-                                    <span>Subtotal</span>
+                                    <span>{t("subtotal")}</span>
                                     <span>{formatCurrency(subTotal, selectedCurrency)}</span>
                                 </div>
                                 <div className="flex justify-between items-center text-sm">
                                     <div className="flex items-center gap-2">
-                                        <span>Tax Rate</span>
+                                        <span>{t("taxPercentage")}</span>
                                         <input type="number" value={taxPercentage} onChange={e => setTaxPercentage(parseFloat(e.target.value) || 0)} className="w-16 p-1 border rounded text-right" />
                                         <span>%</span>
                                     </div>
@@ -454,7 +457,7 @@ const Index = () => {
                                 </div>
                                 <div className="flex justify-between items-center text-xl font-black text-primary pt-2 border-t-2 border-primary/20">
                                     <div className="flex flex-col">
-                                        <span>Total Amount</span>
+                                        <span>{t("grandTotal")}</span>
                                         <button
                                             onClick={() => router.push(`/tools?amount=${grandTotal}`)}
                                             className="text-[10px] text-muted-foreground uppercase flex items-center gap-1 hover:text-primary transition-colors"
@@ -473,13 +476,13 @@ const Index = () => {
                         <div className="space-y-8 animate-in fade-in slide-in-from-right-4 duration-300">
                             <div>
                                 <div className="flex items-center gap-2 mb-4">
-                                    <h2 className="text-2xl font-semibold">Notes</h2>
+                                    <h2 className="text-2xl font-semibold">{t("notes")}</h2>
                                     <Button variant="ghost" size="icon" onClick={refreshNotes} title="Randomize Notes"><RefreshCw className="h-4 w-4" /></Button>
                                 </div>
                                 <textarea value={notes} onChange={e => setNotes(e.target.value)} className="w-full p-4 border rounded-lg min-h-[120px] bg-background focus:ring-2 focus:ring-primary focus:outline-none" placeholder="Thank you for your business..."></textarea>
                             </div>
                             <div>
-                                <h2 className="text-2xl font-semibold mb-4">Signature</h2>
+                                <h2 className="text-2xl font-semibold mb-4">{t("signature")}</h2>
                                 <div className="border rounded-lg bg-background p-1 overflow-hidden">
                                     <SignatureCanvas
                                         penColor='black'
@@ -492,7 +495,7 @@ const Index = () => {
                                 </div>
                                 <div className="flex justify-between items-center mt-2">
                                     <p className="text-xs text-muted-foreground">Sign above for the invoice</p>
-                                    <Button variant="ghost" size="sm" onClick={() => { sigCanvas.current.clear(); setSignature(null); }}>Clear Signature</Button>
+                                    <Button variant="ghost" size="sm" onClick={() => { sigCanvas.current.clear(); setSignature(null); }}>{t("clearSignature")}</Button>
                                 </div>
                             </div>
                         </div>
@@ -501,20 +504,33 @@ const Index = () => {
                     {/* Step 6: Template */}
                     {currentStep === 5 && (
                         <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-300">
-                            <h2 className="text-2xl font-semibold">Choose Template</h2>
+                            <h2 className="text-2xl font-semibold">{t("stepTemplate")}</h2>
                             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                                {templates.map((template, index) => (
-                                    <div key={index} className="group relative border rounded-xl overflow-hidden cursor-pointer hover:ring-2 hover:ring-primary transition-all shadow-sm bg-card" onClick={() => handleTemplateClick(index + 1)}>
-                                        <div className="w-full h-48 bg-muted relative">
-                                            <img
-                                                src={`/assets/template${index + 1}-preview.png`}
-                                                alt={template.name}
-                                                className="w-full h-full object-cover object-top border-b transition-opacity duration-300"
-                                                onError={(e) => {
-                                                    e.target.style.display = 'none';
-                                                    e.target.nextSibling.style.display = 'flex';
-                                                }}
-                                            />
+                                {getAllTemplates().map((template) => (
+                                    <div 
+                                        key={template.id} 
+                                        className="group relative border rounded-xl overflow-hidden cursor-pointer hover:ring-2 hover:ring-primary transition-all shadow-sm bg-card" 
+                                        onClick={() => handleTemplateClick(template.id)}
+                                    >
+                                        <div className="w-full h-48 bg-muted relative flex items-center justify-center">
+                                            {template.isCustom ? (
+                                                <div className="flex flex-col items-center gap-2 p-4 text-center">
+                                                    <div className="p-3 bg-primary/10 rounded-2xl text-primary mb-1">
+                                                        <LayoutDashboard className="h-8 w-8" />
+                                                    </div>
+                                                    <span className="text-[10px] font-black text-primary uppercase tracking-widest">Custom Brand Design</span>
+                                                </div>
+                                            ) : (
+                                                <img
+                                                    src={`/assets/template${template.id}-preview.png`}
+                                                    alt={template.name}
+                                                    className="w-full h-full object-cover object-top border-b transition-opacity duration-300"
+                                                    onError={(e) => {
+                                                        e.target.style.display = 'none';
+                                                        e.target.nextSibling.style.display = 'flex';
+                                                    }}
+                                                />
+                                            )}
                                             <div className="absolute inset-0 hidden items-center justify-center bg-muted flex-col gap-2">
                                                 <LayoutDashboard className="h-8 w-8 text-muted-foreground/50" />
                                                 <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Preview Missing</span>
@@ -533,14 +549,14 @@ const Index = () => {
 
                 <div className="border-t bg-muted/20 p-6 flex justify-between items-center">
                     <Button variant="ghost" onClick={prevStep} disabled={currentStep === 0}>
-                        <FiChevronLeft className="mr-2" /> Back
+                        <FiChevronLeft className="mr-2" /> {t("previous")}
                     </Button>
                     <div className="text-sm text-muted-foreground font-medium">
-                        Step {currentStep + 1} of {STEPS.length}
+                        {t("stepInfo")} {currentStep + 1} / {STEPS.length}
                     </div>
                     {currentStep < STEPS.length - 1 ? (
                         <Button onClick={nextStep}>
-                            Next <FiChevronRight className="ml-2" />
+                            {t("next")} <FiChevronRight className="ml-2" />
                         </Button>
                     ) : (
                         <span className="text-sm font-medium text-primary">Select a template above to generate PDF</span>

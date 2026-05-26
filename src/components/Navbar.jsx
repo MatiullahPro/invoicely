@@ -2,9 +2,10 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { FileText, Receipt, LayoutDashboard, Info, Users, Box, History, Database, Wrench, BarChart3, Menu } from "lucide-react";
+import { FileText, Receipt, LayoutDashboard, Info, Users, Box, History, Database, Wrench, BarChart3, Menu, Coins, Globe, Check } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { useLanguage } from "@/context/LanguageContext";
 import {
     Sheet,
     SheetContent,
@@ -12,6 +13,12 @@ import {
     SheetTitle,
     SheetTrigger,
 } from "@/components/ui/sheet";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const NavItem = ({ href, icon: Icon, children, onClick }) => {
     const pathname = usePathname();
@@ -33,6 +40,18 @@ const NavItem = ({ href, icon: Icon, children, onClick }) => {
 };
 
 export function Navbar() {
+    const { language, setLanguage, t } = useLanguage();
+
+    const languages = [
+        { code: 'en', label: 'English', flag: '🇺🇸' },
+        { code: 'hi', label: 'हिन्दी', flag: '🇮🇳' },
+        { code: 'es', label: 'Español', flag: '🇪🇸' },
+        { code: 'fr', label: 'Français', flag: '🇫🇷' },
+        { code: 'de', label: 'Deutsch', flag: '🇩🇪' },
+        { code: 'ar', label: 'العربية', flag: '🇸🇦' },
+        { code: 'zh', label: '中文', flag: '🇨🇳' }
+    ];
+
     const fillAllDummyData = () => {
         // Fill Clients
         const dummyClients = [
@@ -49,6 +68,15 @@ export function Navbar() {
             { id: Date.now() + 6, name: "Cloud Hosting", description: "Annual management fee", price: "1200" }
         ];
         localStorage.setItem("billing_inventory", JSON.stringify(dummyInventory));
+
+        // Fill Expenses
+        const dummyExpenses = [
+            { id: Date.now() + 50, title: "Next.js Pro Hosting", category: "Software/Hosting", amount: 150, date: new Date().toISOString().split('T')[0], paymentMethod: "Credit Card", tax: 5 },
+            { id: Date.now() + 51, title: "Google Workspace Sub", category: "Software/Hosting", amount: 36, date: new Date().toISOString().split('T')[0], paymentMethod: "Bank Transfer", tax: 0 },
+            { id: Date.now() + 52, title: "Premium Fonts", category: "Office & Supplies", amount: 85, date: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString().split('T')[0], paymentMethod: "PayPal", tax: 10 },
+            { id: Date.now() + 53, title: "Client Dinner", category: "Travel & Dining", amount: 120, date: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000).toISOString().split('T')[0], paymentMethod: "Cash", tax: 8 }
+        ];
+        localStorage.setItem("billing_expenses", JSON.stringify(dummyExpenses));
 
         // Fill History with multiple items
         const dummyHistory = Array.from({ length: 25 }, (_, i) => {
@@ -85,13 +113,14 @@ export function Navbar() {
     };
 
     const navLinks = [
-        { href: "/", icon: FileText, label: "Invoices" },
-        { href: "/receipt", icon: Receipt, label: "Receipts" },
-        { href: "/clients", icon: Users, label: "Clients" },
-        { href: "/inventory", icon: Box, label: "Inventory" },
-        { href: "/history", icon: History, label: "History" },
-        { href: "/ledger", icon: BarChart3, label: "Ledger" },
-        { href: "/tools", icon: Wrench, label: "Tools" },
+        { href: "/", icon: FileText, label: t("invoices") },
+        { href: "/receipt", icon: Receipt, label: t("receipts") },
+        { href: "/clients", icon: Users, label: t("clients") },
+        { href: "/inventory", icon: Box, label: t("inventory") },
+        { href: "/expenses", icon: Coins, label: t("expenses") },
+        { href: "/history", icon: History, label: t("history") },
+        { href: "/ledger", icon: BarChart3, label: t("ledger") },
+        { href: "/tools", icon: Wrench, label: t("tools") },
     ];
 
     return (
@@ -121,12 +150,12 @@ export function Navbar() {
                                         </NavItem>
                                     ))}
                                     <div className="h-[1px] bg-muted my-2"></div>
-                                    <NavItem href="/about" icon={Info}>About</NavItem>
+                                    <NavItem href="/about" icon={Info}>{t("about")}</NavItem>
                                 </nav>
                                 <div className="absolute bottom-8 left-6 right-6">
                                     <Button variant="outline" className="w-full gap-2 text-xs font-bold" onClick={fillAllDummyData}>
                                         <Database className="h-3.5 w-3.5" />
-                                        Fill All Demo Data
+                                        {t("fillDemoData")}
                                     </Button>
                                 </div>
                             </SheetContent>
@@ -156,15 +185,44 @@ export function Navbar() {
                 <div className="flex items-center gap-3">
                     <Button variant="ghost" size="sm" onClick={fillAllDummyData} className="hidden lg:flex gap-2 text-xs font-bold text-muted-foreground hover:text-primary transition-colors">
                         <Database className="h-3.5 w-3.5" />
-                        <span>Fill All Demo Data</span>
+                        <span>{t("fillDemoData")}</span>
                     </Button>
+                    
+                    {/* Language Switcher Dropdown */}
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                            <Button variant="ghost" size="sm" className="gap-2 h-9 border rounded-xl bg-muted/20 px-3 hover:bg-muted/40 transition-colors">
+                                <Globe className="h-4 w-4 text-muted-foreground" />
+                                <span className="text-xs font-bold uppercase hidden sm:inline">
+                                    {language}
+                                </span>
+                            </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end" className="w-[180px] rounded-2xl p-1.5 border shadow-xl">
+                            {languages.map((lang) => (
+                                <DropdownMenuItem 
+                                    key={lang.code} 
+                                    onClick={() => setLanguage(lang.code)}
+                                    className={cn(
+                                        "flex items-center justify-between font-bold cursor-pointer rounded-xl text-xs py-2 px-3 transition-colors",
+                                        language === lang.code ? "bg-primary text-primary-foreground focus:bg-primary focus:text-primary-foreground" : "hover:bg-muted/50"
+                                    )}
+                                >
+                                    <span className="flex items-center gap-2">
+                                        <span className="text-base">{lang.flag}</span>
+                                        <span>{lang.label}</span>
+                                    </span>
+                                    {language === lang.code && <Check className="h-3 w-3" />}
+                                </DropdownMenuItem>
+                            ))}
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+
                     <div className="hidden sm:block">
-                        <NavItem href="/about" icon={Info}>About</NavItem>
+                        <NavItem href="/about" icon={Info}>{t("about")}</NavItem>
                     </div>
                 </div>
             </div>
         </header>
     );
 }
-
-
