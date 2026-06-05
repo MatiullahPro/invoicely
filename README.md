@@ -421,3 +421,5 @@ Special thanks to all contributors and the open-source community! 💙
 ### [⭐ Star this repo](https://github.com/matiullahpro/invoicely) • [🍴 Fork it](https://github.com/matiullahpro/invoicely/fork) • [📖 Read the docs](#)
 
 </div>
+
+This project is tested with BrowserStack.
